@@ -1,0 +1,31 @@
+### List all applications
+GET http://localhost:3000/applications
+
+### Create an application
+POST http://localhost:3000/applications
+Content-Type: application/json
+
+{
+  "companyName": "Example Company",
+  "roleTitle": "Node.js Developer",
+  "jobUrl": "https://example.com/jobs/node-role",
+  "status": "APPLIED",
+  "nextFollowUpAt": "2026-10-20T10:00:00.000Z",
+  "notes": "Synthetic test data only.",
+  "userId": 1
+}
+
+### Get one application (replace 1 with a real ID)
+GET http://localhost:3000/applications/1
+
+### Update an application (replace 1 with a real ID)
+PATCH http://localhost:3000/applications/1
+Content-Type: application/json
+
+{
+  "status": "INTERVIEW",
+  "notes": "Updated using a sample request."
+}
+
+### Delete an application (replace 1 with a real ID)
+DELETE http://localhost:3000/applications/1
