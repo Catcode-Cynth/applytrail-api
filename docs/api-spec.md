@@ -86,7 +86,7 @@ Purpose: permanently delete the selected application and its follow-up records.
 
 Success **200 OK**:
 ```json
-{ "message": "Application 1 deleted successfully" }
+{ "message": "Application 4 deleted successfully" }
 ```
 
 Invalid ID format **400 Bad Request**. Unknown ID **404 Not Found**.
