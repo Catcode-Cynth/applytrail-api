@@ -34,3 +34,11 @@ Create a job application â†’ retrieve the application list or one application â†
 3. **Accidental exposure of secrets or personal data:** use `.env.example`, keep `.env` and the SQLite database out of Git, and seed synthetic data only.
 
 
+Project Links
+GitHub Repository: https://github.com/Catcode-Cynth/applytrail-api/
+
+Postman Collection: https://web.postman.co/workspace/My-Workspace~2e2ca7de-0f37-4102-84bf-2b9c544e2f87/collection/58987073-37244e0e-87df-4358-a534-198510c36361?action=share&source=copy-link&creator=58987073
+
+Google Drive Submission Folder: https://drive.google.com/file/d/1gYLiHGCeFkNV9LOAZ2xUoIuBr54TfXVl/view?usp=sharing
+
+
