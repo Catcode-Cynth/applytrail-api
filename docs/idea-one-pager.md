@@ -1,5 +1,6 @@
 # ApplyTrail API — Week 1 Idea One-Pager
 
+**Idea Name:** ApplyTrail API
 **Track:** Backend Development  
 **Stack:** Node.js, TypeScript, NestJS, Prisma ORM, SQLite (local development)  
 **Target user:** An early-career job seeker applying to multiple roles who needs a reliable place to track each application and next action.  
@@ -13,7 +14,7 @@
 ## Core flow
 Create a job application → retrieve the application list or one application → update its status or follow-up date → delete an obsolete record.
 
-## In scope for this three-week MVP
+## In scope 
 - CRUD API for job applications.
 - Relationships between users, applications, and follow-ups.
 - Input validation and consistent HTTP status behaviour.
@@ -31,3 +32,5 @@ Create a job application → retrieve the application list or one application �
 1. **Scope creep:** keep Week 1 CRUD focused on JobApplication and defer auth/follow-up endpoints to Week 2.
 2. **Database/tooling setup delays:** use SQLite locally and document exact clean-machine setup steps.
 3. **Accidental exposure of secrets or personal data:** use `.env.example`, keep `.env` and the SQLite database out of Git, and seed synthetic data only.
+
+

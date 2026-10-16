@@ -1,7 +1,6 @@
 # ApplyTrail ERD
 
-```mermaid
-erDiagram
+Diagram
     USER ||--o{ JOB_APPLICATION : owns
     JOB_APPLICATION ||--o{ FOLLOW_UP : has
 

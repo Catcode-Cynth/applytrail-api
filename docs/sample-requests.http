@@ -15,11 +15,11 @@ Content-Type: application/json
   "userId": 1
 }
 
-### Get one application (replace 1 with a real ID)
-GET http://localhost:3000/applications/1
+### Get one application 
+GET http://localhost:3000/applications/2
 
-### Update an application (replace 1 with a real ID)
-PATCH http://localhost:3000/applications/1
+### Update an application 
+PATCH http://localhost:3000/applications/4
 Content-Type: application/json
 
 {
@@ -27,5 +27,8 @@ Content-Type: application/json
   "notes": "Updated using a sample request."
 }
 
-### Delete an application (replace 1 with a real ID)
-DELETE http://localhost:3000/applications/1
+### Delete an application 
+DELETE http://localhost:3000/applications/4
+
+### Delete an application 
+POST {{base_url}}/applications
