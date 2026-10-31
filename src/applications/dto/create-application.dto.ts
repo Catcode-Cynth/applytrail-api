@@ -1,5 +1,13 @@
 import { ApplicationStatus } from '../application-status.enum';
-import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength, Min } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateApplicationDto {
   @IsString()
@@ -33,9 +41,4 @@ export class CreateApplicationDto {
   @IsString()
   @MaxLength(2000)
   notes?: string;
-
-  // Week 1 uses the seeded demo user. Week 2 will derive this from authentication.
-  @IsInt()
-  @Min(1)
-  userId!: number;
 }

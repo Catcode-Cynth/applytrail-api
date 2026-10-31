@@ -57,3 +57,31 @@ This development API is not authenticated yet. Creation uses the seeded demo use
 
 ## AI / source declaration
 Use this section to accurately declare the tools, libraries, boilerplate, and material AI assistance actually used during development. Current draft: ChatGPT helped draft planning materials and an initial code scaffold; the participant must review, test, and understand the submitted implementation and update this statement to reflect the work actually performed.
+
+
+## Authentication
+- `POST /auth/signup` – create account
+- `POST /auth/login` – returns JWT `access_token`
+
+Protected routes require header:
+`Authorization: Bearer <access_token>`
+
+Users can only create/read/update/delete their own applications and follow-ups.
+Follow-ups
+
+
+## Follow-ups
+- `POST /applications/:applicationId/follow-ups`
+- `GET /applications/:applicationId/follow-ups`
+- `GET /follow-ups/:id`
+- `PATCH /follow-ups/:id`
+- `DELETE /follow-ups/:id`
+
+
+## How to run
+1. Copy `.env.example` to `.env` and set `DATABASE_URL` + `JWT_SECRET`
+2. `npm install`
+3. `npx prisma db push`
+4. `npx prisma db seed` (optional)
+5. `npm run start:dev`
+6. API available at http://localhost:3000

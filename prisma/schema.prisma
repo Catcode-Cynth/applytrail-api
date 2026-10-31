@@ -11,8 +11,11 @@ model User {
   id           Int               @id @default(autoincrement())
   fullName     String
   email        String            @unique
+  passwordHash String
+  role         String            @default("USER")
   createdAt    DateTime          @default(now())
   applications JobApplication[]
+
 }
 
 model JobApplication {

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
@@ -7,14 +11,9 @@ import { UpdateApplicationDto } from './dto/update-application.dto';
 export class ApplicationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateApplicationDto) {
-    const demoUser = await this.prisma.user.findUnique({
-      where: { id: dto.userId },
-      select: { id: true },
-    });
-    if (!demoUser) throw new NotFoundException(`User ${dto.userId} was not found`);
+  async create(dto: CreateApplicationDto, userId: number) {
+    const { appliedAt, nextFollowUpAt, ...fields } = dto;
 
-    const { userId, appliedAt, nextFollowUpAt, ...fields } = dto;
     return this.prisma.jobApplication.create({
       data: {
         ...fields,
@@ -26,25 +25,36 @@ export class ApplicationsService {
     });
   }
 
-  async findAll() {
+  async findAll(userId: number) {
     return this.prisma.jobApplication.findMany({
+      where: { userId },
       orderBy: { createdAt: 'desc' },
       include: { user: true, followUps: true },
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, userId: number) {
     const application = await this.prisma.jobApplication.findUnique({
       where: { id },
       include: { user: true, followUps: true },
     });
-    if (!application) throw new NotFoundException(`Application ${id} was not found`);
+
+    if (!application) {
+      throw new NotFoundException(`Application ${id} was not found`);
+    }
+
+    if (application.userId !== userId) {
+      throw new ForbiddenException('You do not have access to this application');
+    }
+
     return application;
   }
 
-  async update(id: number, dto: UpdateApplicationDto) {
-    await this.ensureExists(id);
+  async update(id: number, dto: UpdateApplicationDto, userId: number) {
+    await this.ensureOwnership(id, userId);
+
     const { appliedAt, nextFollowUpAt, ...fields } = dto;
+
     return this.prisma.jobApplication.update({
       where: { id },
       data: {
@@ -56,14 +66,25 @@ export class ApplicationsService {
     });
   }
 
-  async remove(id: number) {
-    await this.ensureExists(id);
+  async remove(id: number, userId: number) {
+    await this.ensureOwnership(id, userId);
+
     await this.prisma.jobApplication.delete({ where: { id } });
     return { message: `Application ${id} deleted successfully` };
   }
 
-  private async ensureExists(id: number) {
-    const application = await this.prisma.jobApplication.findUnique({ where: { id }, select: { id: true } });
-    if (!application) throw new NotFoundException(`Application ${id} was not found`);
+  private async ensureOwnership(id: number, userId: number) {
+    const application = await this.prisma.jobApplication.findUnique({
+      where: { id },
+      select: { id: true, userId: true },
+    });
+
+    if (!application) {
+      throw new NotFoundException(`Application ${id} was not found`);
+    }
+
+    if (application.userId !== userId) {
+      throw new ForbiddenException('You do not have permission to modify this application');
+    }
   }
 }
