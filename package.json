@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "description": "A REST API for tracking job applications and follow-ups",
-  "scripts": {
-    "build": "nest build",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:prod": "node dist/main",
-    "prisma:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev --name init",
-    "db:seed": "ts-node prisma/seed.ts",
-    "db:studio": "prisma studio"
+"scripts": {
+  "build": "nest build",
+  "start": "nest start",
+  "start:dev": "nest start --watch",
+  "start:prod": "node dist/main",
+  "prisma:generate": "prisma generate",
+  "db:migrate": "prisma migrate dev --name init",
+  "db:seed": "ts-node prisma/seed.ts",
+  "db:studio": "prisma studio",
+  "test": "jest",
+  "test:e2e": "jest --config ./test/jest-e2e.json --runInBand --watchman=false",
+  "test:watch": "jest --watch"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -35,10 +38,16 @@
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.9",
+    "@nestjs/testing": "^10.4.22",
     "@types/bcrypt": "^6.0.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.10.2",
     "@types/passport-jwt": "^4.0.1",
+    "@types/supertest": "^7.2.1",
+    "jest": "^30.5.2",
     "prisma": "5.22.0",
+    "supertest": "^7.3.1",
+    "ts-jest": "^29.4.15",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }

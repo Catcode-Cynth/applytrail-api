@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Query,
   HttpCode,
   HttpStatus,
   Param,
@@ -28,10 +29,17 @@ export class ApplicationsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
-  findAll(@Request() req) {
-    return this.applicationsService.findAll(req.user.id);
-  }
+@Get()
+findAll(
+  @Request() req,
+  @Query('page') page = '1',
+  @Query('limit') limit = '10',
+) {
+  const pageNumber = Math.max(parseInt(page, 10) || 1, 1);
+  const limitNumber = Math.min(Math.max(parseInt(limit, 10) || 10, 1), 50);
+
+  return this.applicationsService.findAll(req.user.id, pageNumber, limitNumber);
+}
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')

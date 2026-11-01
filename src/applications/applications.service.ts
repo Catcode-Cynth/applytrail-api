@@ -25,13 +25,30 @@ export class ApplicationsService {
     });
   }
 
-  async findAll(userId: number) {
-    return this.prisma.jobApplication.findMany({
+ async findAll(userId: number, page = 1, limit = 10) {
+  const skip = (page - 1) * limit;
+
+  const [data, total] = await this.prisma.$transaction([
+    this.prisma.jobApplication.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
       include: { user: true, followUps: true },
-    });
-  }
+      skip,
+      take: limit,
+    }),
+    this.prisma.jobApplication.count({
+      where: { userId },
+    }),
+  ]);
+
+  return {
+    data,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit) || 1,
+  };
+}
 
   async findOne(id: number, userId: number) {
     const application = await this.prisma.jobApplication.findUnique({
