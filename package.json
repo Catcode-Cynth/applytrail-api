@@ -3,18 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "description": "A REST API for tracking job applications and follow-ups",
-"scripts": {
-  "build": "nest build",
-  "start": "nest start",
-  "start:dev": "nest start --watch",
-  "start:prod": "node dist/main",
-  "prisma:generate": "prisma generate",
-  "db:migrate": "prisma migrate dev --name init",
-  "db:seed": "ts-node prisma/seed.ts",
-  "db:studio": "prisma studio",
-  "test": "jest",
-  "test:e2e": "jest --config ./test/jest-e2e.json --runInBand --watchman=false",
-  "test:watch": "jest --watch"
+  "scripts": {
+    "build": "nest build",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main",
+    "prisma:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev --name init",
+    "db:seed": "ts-node prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "test": "jest",
+    "test:e2e": "jest --config ./test/jest-e2e.json --runInBand --watchman=false",
+    "test:watch": "jest --watch"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -26,6 +26,7 @@
     "@nestjs/mapped-types": "^2.0.6",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.4.15",
+    "@nestjs/swagger": "^7.4.2",
     "@prisma/client": "5.22.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",

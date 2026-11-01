@@ -29,3 +29,15 @@
 **Description:** Create Follow-up returned `Cannot POST /auth/signup/applications/1/follow-ups`.  
 **Options considered:** Route registration bug vs wrong client URL.  
 **Decision & fix:** The client was calling the wrong path. Corrected the URL to `POST /applications/:applicationId/follow-ups`. Routes worked as expected.
+
+### Issue #7 – Jest Watchman crash on macOS
+**Description:** `npm run test:e2e` failed due to Watchman/icu4c library error.
+**Decision & fix:** Ran Jest with `--watchman=false` and locked that into the npm script.
+
+### Issue #8 – Pagination request returned JSON parse error
+**Description:** GET /applications?page=1&limit=5 failed with invalid JSON error.
+**Decision & fix:** Removed accidental request body in Thunder Client; GET should send no body.
+
+### Issue #9 – Render deploy path issues
+**Description:** Deploy build/start failed around Nest CLI and dist path.
+**Decision & fix:** Adjusted build commands; kept reliable local run guide for submission while deployment was being resolved.
