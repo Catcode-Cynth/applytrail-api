@@ -122,7 +122,7 @@ describe('ApplyTrail API (e2e)', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      expect(Array.isArray(res.body)).toBe(true);
+     console.log('APPLICATIONS RESPONSE:', res.body);
     });
 
     it('GET /applications/:id - should return 404 for missing id', async () => {

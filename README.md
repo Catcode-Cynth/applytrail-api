@@ -1,208 +1,287 @@
 # ApplyTrail API
 
-ApplyTrail is a small REST API for job seekers to track saved/applied roles, application status, and follow-up dates. This repository is the Week 1 proof-of-work slice for the BuildLab Stage 1 Backend Development assignment.
+**ApplyTrail API** is a REST API built to help job seekers organise and track their job applications. It allows users to save application details, monitor their application status, and manage follow-up activities.
 
-## Stack
-- Node.js + TypeScript + NestJS
-- Prisma ORM
-- SQLite for local development
-- DTO validation with `class-validator`
+I built this project as part of the **BuildLab Africa Stage 1 Backend Development Programme**, developing it over three weeks and improving it as I learned more about backend development.
 
-## Week 1 scope
-- Data model with related `User`, `JobApplication`, and `FollowUp` entities.
-- CRUD endpoints for the main `JobApplication` entity.
-- Synthetic seed data and sample requests.
-- ERD and API specification in `docs/`.
+## Tech Stack
 
-## Run locally
-Requirements: Node.js 20+ and npm.
+- **Node.js** – JavaScript runtime.
+- **TypeScript** – Strongly typed JavaScript.
+- **NestJS** – Backend framework used to build the API.
+- **Prisma ORM** – Database access and management.
+- **SQLite** – Local development database.
+- **Jest & Supertest** – Automated testing.
+- **class-validator** – Request validation.
+- **JWT & bcrypt** – Authentication and password security.
 
-1. Copy `.env.example` to `.env` in the project root. The example uses a local SQLite database.
-2. Install dependencies: `npm install`
-3. Generate the Prisma client: `npm run prisma:generate`
-4. Create the database/migration: `npm run db:migrate`
-5. Seed synthetic sample records: `npm run db:seed`
-6. Start the API: `npm run start:dev`
-7. Call `http://localhost:3000/applications` from Postman or the included `docs/sample-requests.http` file.
+## Project Features
 
-If `npm run db:migrate` prompts for a migration name, use `init`.
+- User registration and login.
+- JWT-based authentication.
+- Secure password hashing with bcrypt.
+- Create, retrieve, update, and delete job applications.
+- Create and manage follow-up records.
+- User ownership checks to prevent unauthorised access.
+- Request validation and consistent error handling.
+- Pagination on application listing.
+- Automated end-to-end tests.
 
-## Endpoints
-| Method | Path | Purpose | Expected success |
-|---|---|---|---|
-| POST | `/applications` | Create application | 201 |
-| GET | `/applications` | List applications | 200 |
-| GET | `/applications/:id` | Read one application | 200 |
-| PATCH | `/applications/:id` | Update application | 200 |
-| DELETE | `/applications/:id` | Delete application | 200 |
+## Project Structure and Development
 
-The API validates body fields and rejects unknown fields. Invalid request bodies and invalid integer IDs return 400; unknown application IDs return 404.
+The project was developed in three stages:
 
-## Week 1 limitation
-This development API is not authenticated yet. Creation uses the seeded demo user's `userId` (normally `1`). Do not use real user data. Authentication and ownership checks are planned for Week 2; tests, pagination, rate limiting, final API docs, and deployment/local clean-machine verification are planned for Week 3.
+**Week 1 – Foundation and CRUD**
+- Designed the database structure and relationships.
+- Created the ERD and API specification.
+- Implemented the core job application CRUD endpoints.
+- Added synthetic seed data and sample requests.
 
-## Documentation
-- [Idea one-pager](docs/idea-one-pager.md)
-- [Work plan](docs/work-plan.md)
-- [ERD](docs/erd.md)
-- [REST API specification](docs/api-spec.md)
-- [Design decisions](docs/design-decisions.md)
-- [Sample requests](docs/sample-requests.http)
-- [Week 1 update note](docs/weekly-update-week-1.md)
+**Week 2 – Authentication and API Security**
+- Implemented user registration and login.
+- Added JWT authentication and bcrypt password hashing.
+- Protected application and follow-up routes.
+- Implemented ownership checks.
+- Added request validation and global exception handling.
 
-## Security Notes
-
-- Passwords are hashed with bcrypt (never stored in plain text)
-- JWT authentication protects create/read/update/delete routes
-- Ownership checks return 403 when a user tries to access another user's records
-- Input validation with class-validator on request DTOs
-- Global exception filter prevents stack traces from leaking to clients
-- Secrets are loaded from environment variables (`.env` is not committed)
-- CORS can be configured deliberately in production; local development uses default Nest settings
-- Basic recommendation: add rate limiting on `/auth/login` and `/auth/signup` in production
-
-
-## AI / source declaration
-Use this section to accurately declare the tools, libraries, boilerplate, and material AI assistance actually used during development. Current draft: ChatGPT helped draft planning materials and an initial code scaffold; the participant must review, test, and understand the submitted implementation and update this statement to reflect the work actually performed.
-
-
-## Authentication
-- `POST /auth/signup` – create account
-- `POST /auth/login` – returns JWT `access_token`
-
-Protected routes require header:
-`Authorization: Bearer <access_token>`
-
-Users can only create/read/update/delete their own applications and follow-ups.
-Follow-ups
-
-
-## Follow-ups
-- `POST /applications/:applicationId/follow-ups`
-- `GET /applications/:applicationId/follow-ups`
-- `GET /follow-ups/:id`
-- `PATCH /follow-ups/:id`
-- `DELETE /follow-ups/:id`
-
-
-## How to run
-1. Copy `.env.example` to `.env` and set `DATABASE_URL` + `JWT_SECRET`
-2. `npm install`
-3. `npx prisma db push`
-4. `npx prisma db seed` (optional)
-5. `npm run start:dev`
-6. API available at http://localhost:3000
-
-## Testing
-
-Run tests with:
-
-```bash
-npm run test:e2e
-
-What is tested
-Auth signup and login
-Login failure with wrong password (401)
-Creating applications without token (401)
-Creating and listing applications with token
-Missing application id (404)
-Creating and listing follow-ups
-What is not tested (and why)
-Full 403 ownership matrix across every endpoint (manually verified in Week 2; can be expanded later)
-Pagination edge cases (added as a Week 3 enhancement if time allows)
-Deployed production environment (local e2e covers API behaviour)
-Exhaustive unit tests for every service method (priority given to integration tests of critical paths)
-
+**Week 3 – Testing, Documentation and Delivery**
+- Added automated end-to-end tests.
+- Implemented pagination.
+- Documented API endpoints and setup instructions.
+- Reviewed security and performance considerations.
+- Prepared the project for final submission.
 
 ## API Endpoints
 
-### Auth
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/auth/signup` | No | Create account |
-| POST | `/auth/login` | No | Login and receive JWT |
+### Authentication
+
+| Method | Endpoint | Authentication | Description |
+|---|---|---|---|
+| POST | `/auth/signup` | No | Create a user account |
+| POST | `/auth/login` | No | Log in and receive a JWT |
 
 ### Applications
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/applications` | Yes | Create application |
-| GET | `/applications` | Yes | List current user's applications |
-| GET | `/applications/:id` | Yes | Get one application (owner only) |
-| PATCH | `/applications/:id` | Yes | Update application (owner only) |
-| DELETE | `/applications/:id` | Yes | Delete application (owner only) |
-| GET /applications?page=1&limit=10
-Returns paginated list for the authenticated user.
+
+| Method | Endpoint | Authentication | Description |
+|---|---|---|---|
+| POST | `/applications` | Yes | Create an application |
+| GET | `/applications` | Yes | List the current user's applications |
+| GET | `/applications/:id` | Yes | Retrieve one application |
+| PATCH | `/applications/:id` | Yes | Update an application |
+| DELETE | `/applications/:id` | Yes | Delete an application |
+
+**Pagination example:**
+
+`GET /applications?page=1&limit=10`
+
+Returns a paginated list of applications belonging to the authenticated user.
 
 ### Follow-ups
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/applications/:applicationId/follow-ups` | Yes | Create follow-up |
-| GET | `/applications/:applicationId/follow-ups` | Yes | List follow-ups for application |
-| GET | `/follow-ups/:id` | Yes | Get one follow-up |
-| PATCH | `/follow-ups/:id` | Yes | Update follow-up |
-| DELETE | `/follow-ups/:id` | Yes | Delete follow-up |
 
-Protected routes require:
+| Method | Endpoint | Authentication | Description |
+|---|---|---|---|
+| POST | `/applications/:applicationId/follow-ups` | Yes | Create a follow-up |
+| GET | `/applications/:applicationId/follow-ups` | Yes | List follow-ups for an application |
+| GET | `/follow-ups/:id` | Yes | Retrieve one follow-up |
+| PATCH | `/follow-ups/:id` | Yes | Update a follow-up |
+| DELETE | `/follow-ups/:id` | Yes | Delete a follow-up |
+
+**Authentication requirement**
+
+Protected routes require a JWT in the request header:
+
 `Authorization: Bearer <access_token>`
 
-## Setup Guide
+Users can only access and manage their own applications and follow-up records.
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-Copy environment file:
-bash
+## Getting Started
+
+### Requirements
+
+- Node.js 20 or later
+- npm
+- Git
+
+### Installation and Setup
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/Catcode-Cynth/applytrail-api.git
+cd applytrail-api
+```
+
+**2. Install dependencies**
+
+```bash
+npm install
+```
+
+**3. Configure environment variables**
+
+Copy `.env.example` to `.env`:
+
+```bash
 cp .env.example .env
-Set values in .env:
+```
+
+Add your local configuration:
+
+```env
 DATABASE_URL="file:./dev.db"
 JWT_SECRET="your-long-random-secret"
-Prepare database:
-bash
-npx prisma generate
-npx prisma db push
-npx prisma db seed
-Start the API:
-bash
+```
+
+Use your own secure JWT secret. Do not commit your `.env` file to GitHub.
+
+**4. Generate the Prisma client**
+
+```bash
+npm run prisma:generate
+```
+
+**5. Set up the database**
+
+```bash
+npm run db:migrate
+```
+
+If prompted for a migration name, use `init`.
+
+**6. Seed the database**
+
+```bash
+npm run db:seed
+```
+
+**7. Start the development server**
+
+```bash
 npm run start:dev
-API runs at: http://localhost:3000
-Run tests
-bash
+```
+
+The API will be available at:
+
+[http://localhost:3000](http://localhost:3000)
+
+You can test the endpoints using Thunder Client or another API testing tool.
+
+## Testing
+
+Automated end-to-end tests are used to check important API functionality and verify how the application responds to both successful and unsuccessful requests.
+
+**Run the tests:**
+
+```bash
 npm run test:e2e
+```
+
+### What is covered
+
+- User registration and login.
+- Login failure with an incorrect password (**401 Unauthorized**).
+- Attempting to create applications without authentication (**401 Unauthorized**).
+- Creating and listing applications with a valid token.
+- Requests involving missing application IDs (**404 Not Found**).
+- Creating and listing follow-up records.
+
+### Areas for further testing
+
+- Expanding automated **403 Forbidden** ownership tests across every protected endpoint. Ownership scenarios were also manually verified during Week 2.
+- Additional pagination edge cases.
+- Testing against a deployed production environment.
+- More exhaustive unit tests for individual service methods.
+
+The testing approach prioritises integration and end-to-end coverage of critical application flows. These areas can be expanded as the project grows.
+
+## Security Notes
+
+Security was considered throughout the development of ApplyTrail.
+
+The following measures have been implemented:
+
+- **Password hashing:** User passwords are hashed with bcrypt rather than stored as plain text.
+- **JWT authentication:** Protected routes require a valid access token.
+- **Ownership checks:** Users cannot access another user's applications or follow-up records.
+- **Input validation:** Request DTOs use `class-validator` and the global validation pipe to reject invalid and unexpected fields.
+- **Error handling:** A global exception filter provides consistent error responses and prevents internal stack traces from being exposed to API clients.
+- **Environment variables:** Sensitive configuration, including the JWT secret, is stored in environment variables. The `.env` file is excluded from version control.
+
+**Further security improvements:**
+
+- Add rate limiting to `/auth/login` and `/auth/signup`.
+- Configure CORS explicitly for the production environment.
+- Expand automated security and ownership tests.
 
 ## Performance Notes
 
-- Database indexes exist on `userId`, `status`, and `applicationId`
-- List endpoints return only the authenticated user's data (smaller result sets)
-- Prisma selected fields/relations are used intentionally on key queries
-- Pagination is recommended for large application lists (can be enabled via `page` and `limit` query params)
-- SQLite is suitable for development/demo; PostgreSQL is recommended for production deployment
+A few decisions were made to keep database queries organised and improve API performance.
 
-# Technical Reflection – ApplyTrail API
+- **Database indexes:** Indexes exist on `userId`, `status`, and `applicationId` to support commonly used queries.
+- **Pagination:** Application listing supports `page` and `limit` query parameters to avoid returning unnecessarily large result sets.
+- **User-specific queries:** List operations return records belonging to the authenticated user.
+- **Prisma queries:** Selected fields and related records are used deliberately in key database queries.
+- **Database choice:** SQLite works well for local development and demonstration. PostgreSQL would be a better choice for a production environment that requires greater concurrency and scalability.
 
-## What changed over three weeks
-- Week 1: data model, ERD, API design, core CRUD for job applications
-- Week 2: JWT authentication, bcrypt password hashing, ownership checks, Follow-up relationships, validation, global error handling
-- Week 3: automated e2e tests, pagination, documentation, security/performance notes, final packaging
+## Technical Reflection
 
-## Key technical decisions
-- NestJS + Prisma + SQLite for fast development within the 3-week window
-- JWT for stateless API authentication
-- Ownership checks on every sensitive route
-- Nested follow-up routes under applications to match the domain model
-- Global exception filter for consistent client-safe errors
-- Jest + Supertest for integration tests of critical paths
+### What changed over the three weeks
 
-## What remains risky
-- SQLite is fine for demo, but not ideal for production concurrency or multi-instance deploys
-- Free-tier hosting can sleep and wipe ephemeral disk if SQLite is used in production
-- Test coverage is focused on critical flows; not every edge case is automated yet
-- Rate limiting is recommended but not fully production-hardened
+The project developed from a basic job application management API into a more structured backend application.
 
-## What I would do next
-- Move to PostgreSQL for production
-- Add rate limiting on auth routes
-- Expand tests for 403 ownership cases across all endpoints
-- Add Swagger/OpenAPI UI
-- Deploy to a stable hosted environment with managed database
+- **Week 1:** I focused on the database design, ERD, API specification and core CRUD operations.
+- **Week 2:** I introduced authentication, password hashing, ownership checks, follow-up relationships, validation and global error handling.
+- **Week 3:** I worked on automated testing, pagination, documentation, security and performance considerations, and final project packaging.
 
+### Key Technical Decisions
+
+- **NestJS and TypeScript:** I used NestJS because its modular structure made it easier to organise the different parts of the application.
+- **Prisma and SQLite:** These made database modelling and local development more manageable within the project timeline.
+- **JWT authentication:** This allowed the API to use token-based authentication for protected routes.
+- **Ownership checks:** These ensure that users can only manage their own records.
+- **Nested follow-up routes:** Follow-ups are associated with job applications, reflecting how they relate to the application's data model.
+- **Jest and Supertest:** These were used to test important API flows and verify expected responses.
+
+### What Still Needs Improvement
+
+Although the core functionality is in place, there are areas I would improve before treating the project as production-ready.
+
+- Move from SQLite to PostgreSQL for production.
+- Introduce rate limiting on authentication routes.
+- Expand automated tests for ownership and additional edge cases.
+- Add a Swagger/OpenAPI interface.
+- Deploy to a stable hosting environment with a managed database.
+
+### What I Would Do Next
+
+My next steps would be to improve the production readiness of the API, strengthen its automated test coverage, and explore additional features that would make job application tracking more useful.
+
+## AI and Source Declaration
+
+I used ChatGPT as a support tool during the development of ApplyTrail. It helped me with planning, understanding backend concepts, working through errors, reviewing implementation decisions and drafting parts of the project documentation and code.
+
+I also used official documentation and development libraries, including NestJS, Prisma, Jest, Supertest and other packages listed in the project's dependencies.
+
+I reviewed and worked through the implementation, tested the API, made adjustments and used the project as an opportunity to strengthen my understanding of backend engineering.
+
+I take responsibility for the work submitted and for understanding the implementation, its limitations and the technical decisions behind it.
+
+## Project Documentation
+
+Additional project documents are available in the `docs/` directory:
+
+- [Idea One-Pager](docs/idea-one-pager.md)
+- [Work Plan](docs/work-plan.md)
+- [Entity Relationship Diagram](docs/erd.md)
+- [REST API Specification](docs/api-spec.md)
+- [Design Decisions](docs/design-decisions.md)
+- [Sample API Requests](docs/sample-requests.http)
+- [Week 1 Update Note](docs/weekly-update-week-1.md)
+
+---
+
+**Project Repository:** [github.com/Catcode-Cynth/applytrail-api](https://github.com/Catcode-Cynth/applytrail-api)
+
+**Built by:** Cynthia Okechukwu
+
+**Programme:** BuildLab Africa – Stage 1 Backend Development
